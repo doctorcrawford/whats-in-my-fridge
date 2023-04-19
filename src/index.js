@@ -41,13 +41,20 @@ function printElements(response, ingredient) {
   document.querySelector("#show-recipe").innerText = `Here is your recipe using ${ingredient}: Enjoy a delicious ${response.strMeal}.
     Cuisine: ${response.strArea}
     Recipe Instructions: ${response.strInstructions}`;
-  const ingredientListArray = [];
   const responseArray = Object.values(response);
-  for (let i = 9; i <= 28; i++) {
-    if (responseArray[i] != "" && responseArray[i] != null) {
+  const ingredientListArray = [];
+  for (let i = 0; i < responseArray.length; i++) {
+    if (responseArray.includes("strIngredient") && responseArray[i] != "" && responseArray[i] != null) {
       ingredientListArray.push(responseArray[i]);
     }
   }
+  console.log(ingredientListArray);
+  // const ingredientListArray = responseArray.filter(key => key.includes("strIngredient"))
+  // for (let i = 9; i <= 28; i++) {
+  //   if (responseArray[i] != "" && responseArray[i] != null) {
+  //     ingredientListArray.push(responseArray[i]);
+  //   }
+  // }
   const measurementArray = [];
   for (let i = 29; i <= 48; i++) {
     if (responseArray[i].trim() != "" && responseArray[i] != null) {
@@ -72,11 +79,10 @@ function printElements(response, ingredient) {
   const videoAddress = `https://www.youtube.com/embed/${videoId}`;
   const iframe = document.createElement("iframe");
   const youtubeDiv = document.getElementById("youtube-div");
-  iframe.setAttribute("width", 420);
-  iframe.setAttribute("height", 315);
+  iframe.setAttribute("width", 500);
+  iframe.setAttribute("height", 400);
   iframe.setAttribute("src", videoAddress);
   youtubeDiv.append(iframe);
-  console.log(videoId);
 }
 
 function printError(error) {
@@ -85,8 +91,10 @@ function printError(error) {
 
 function handleFormSubmission(event) {
   event.preventDefault();
-  const ingredient = document.querySelector("#main-item").value;
+  const ingredientSpace = document.querySelector("#main-item").value;
+  const ingredient = ingredientSpace.replaceAll(" ", "_");
   document.querySelector("#main-item").value = null;
+  document.querySelector("#ingredients-div").innerHTML = null;
   document.getElementById("youtube-div").innerHTML = null;
   getDishData(ingredient);
 }
