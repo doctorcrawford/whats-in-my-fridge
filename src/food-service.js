@@ -1,16 +1,16 @@
 export default class Recipe {
-  static getRecipe(dishID) {
-    return fetch(`https://themealdb.com/api/json/v1/1/lookup.php?i=${dishID}`)
-      .then(function (response) {
-        if (!response.ok) {
-          const errorMessage = `${response.status} ${response.statusText}`;
-          throw new Error(errorMessage);
-        } else {
-          return response.json();
-        }
-      })
-      .catch(function (error) {
-        return error;
-      });
+  static async getRecipe(dishID) {
+    try {
+      const response = await fetch(`https://themealdb.com/api/json/v1/1/lookup.php?i=${dishID}`);
+      const jsonifiedResponse = await response.json();
+      if (!response.ok) {
+        const errorMessage = `${response.status} ${response.statusText}
+          ${jsonifiedResponse.message}`;
+        throw new Error(errorMessage);
+      }
+      return jsonifiedResponse;
+    } catch (error) {
+      return error;
+    }
   }
 }
