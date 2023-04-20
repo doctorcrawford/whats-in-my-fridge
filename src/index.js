@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
 import Dish from './food-rec.js';
 import Recipe from './food-service.js';
+import GIFY from './gif-service.js';
 
 // Business Logic
 
@@ -31,13 +32,37 @@ function getDishData(ingredient) {
     });
 }
 
+function getGif(ingredient) {
+  GIFY.getGIF(ingredient)
+    .then(function(gifResponse) {
+      if (gifResponse instanceof Error) {
+        const errorMessage = `There was an error grabbing a gif from Giphy for ${ingredient}
+        ${gifResponse.message}`;
+        throw new Error(errorMessage);
+      }
+      const gif = gifResponse.data.images.original.url;
+      printGif(gif, ingredient);
+    });
+}
+
+
+
+
+
 //UI Logic
 
 function printElements(response, ingredient) {
   const urlPict = response.strMealThumb;
-  const img = document.getElementById("recipeImg");
+  const img = document.createElement("img");
   img.setAttribute("src", urlPict);
   img.setAttribute("alt", `an image of ${response.strMeal}`);
+  img.setAttribute("id", "recipeImg");
+  const imgDiv = document.getElementById("img");
+  imgDiv.append(img);
+  const p = document.createElement("p");
+  p.setAttribute("id", "show-recipe");
+  const recipeDiv = document.getElementById("recipe");
+  recipeDiv.append(p);
   document.querySelector("#show-recipe").innerText = `Here is your recipe using ${ingredient}: Enjoy a delicious ${response.strMeal}.
     Cuisine: ${response.strArea}
     Recipe Instructions: ${response.strInstructions}`;
@@ -65,6 +90,7 @@ function printElements(response, ingredient) {
     combinedArray.push(`${ingredientListArray[i]} : ${measurementArray[i]}`);
   }
   const ul = document.createElement("ul");
+  ul.setAttribute("id", "ingredient-list");
   const ingredientsDiv = document.getElementById("ingredients-div");
   for (let i = 0; i < combinedArray.length; i++) {
     const li = document.createElement("li");
@@ -84,6 +110,14 @@ function printElements(response, ingredient) {
   youtubeDiv.append(iframe);
 }
 
+function printGif(gif, ingredient) {
+  const imgDiv = document.getElementById("img");
+  const img = document.createElement("img");
+  img.setAttribute("src", gif);
+  img.setAttribute("alt", `gif of ${ingredient}`);
+  imgDiv.append(img);
+}
+
 function printError(error) {
   document.querySelector("#show-recipe").innerText = error;
 }
@@ -95,7 +129,11 @@ function handleFormSubmission(event) {
   document.querySelector("#main-item").value = null;
   document.querySelector("#ingredients-div").innerHTML = null;
   document.getElementById("youtube-div").innerHTML = null;
+  document.getElementById("img").innerHTML = null;
+  document.getElementById("recipe").innerHTML = null;
   getDishData(ingredient);
+  getGif(ingredient);
+  // Promise.all([getDishData(ingredient), getGif(ingredient)]).then((values))
 }
 
 document.querySelector('form').addEventListener("submit", handleFormSubmission);

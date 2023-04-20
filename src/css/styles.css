@@ -1,3 +1,57 @@
-.center {
+body {
+  background-color: rgb(225, 214, 251);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  /* align-content: center; */
+  text-align: center;
+}
+
+
+
+/* .center {
   margin: auto;
+} */
+
+img {
+  margin: auto;
+  width: 550px;
+  text-align: center;
+  border: 2px solid black;
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+}
+
+#img-recipe {
+  display: flex;
+  flex-direction: row-reverse;
+  text-align: left;
+  max-width: 900px;
+  margin: auto;
+}
+
+#ingredients-div {
+  margin-right: 40px;
+  min-width: fit-content;
+
+}
+
+#ingredient-list {
+  background-color: rgb(236, 222, 204);
+  height: fit-content;
+  padding: auto;
+  padding-right: 9px;
+  border: 2px solid darkgray;
+}
+
+#show-recipe {
+  background-color: rgba(235, 231, 246, 0.423);
+  border: 2px solid rgb(132, 132, 132);
+  padding: 5px;
+}
+
+#recipe {
+  flex-shrink: 8;
 }
