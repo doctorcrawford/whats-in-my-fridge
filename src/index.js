@@ -40,7 +40,8 @@ function getGif(ingredient) {
         ${gifResponse.message}`;
         throw new Error(errorMessage);
       }
-      const gif = gifResponse.data.images.original.url;
+      console.log(gifResponse.data[0].images.original.url);
+      const gif = gifResponse.data[0].images.original.url;
       printGif(gif, ingredient);
     });
 }
