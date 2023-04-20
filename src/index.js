@@ -21,7 +21,7 @@ function getDishData(ingredient) {
     .then(function (recipeResponse) {
       if (recipeResponse instanceof Error) {
         const errorMessage = `There was an error finding a recipe from themealDB:
-           ${recipeResponse.message}`;
+          ${recipeResponse.message}`;
         throw new Error(errorMessage);
       }
       printElements(recipeResponse.meals[0], ingredient);
@@ -41,26 +41,25 @@ function printElements(response, ingredient) {
   document.querySelector("#show-recipe").innerText = `Here is your recipe using ${ingredient}: Enjoy a delicious ${response.strMeal}.
     Cuisine: ${response.strArea}
     Recipe Instructions: ${response.strInstructions}`;
-  const responseArray = Object.values(response);
+  const keyArray = Object.keys(response);
   const ingredientListArray = [];
-  for (let i = 0; i < responseArray.length; i++) {
-    if (responseArray.includes("strIngredient") && responseArray[i] != "" && responseArray[i] != null) {
-      ingredientListArray.push(responseArray[i]);
+
+  for (let i = 0; i < keyArray.length; i++) {
+    let string = "";
+    string = keyArray[i];
+    if (string.includes("strIngredient") && response[keyArray[i]].trim() != "" && response[keyArray[i]] != null) {
+      ingredientListArray.push(response[keyArray[i]]);
+
     }
-  }
-  console.log(ingredientListArray);
-  // const ingredientListArray = responseArray.filter(key => key.includes("strIngredient"))
-  // for (let i = 9; i <= 28; i++) {
-  //   if (responseArray[i] != "" && responseArray[i] != null) {
-  //     ingredientListArray.push(responseArray[i]);
-  //   }
-  // }
+  } 
+
   const measurementArray = [];
-  for (let i = 29; i <= 48; i++) {
-    if (responseArray[i].trim() != "" && responseArray[i] != null) {
-      measurementArray.push(responseArray[i]);
+  for (let i = 0; i < keyArray.length; i++) {
+    let keyString = keyArray[i];
+    if (keyString.includes("strMeasure") && response[keyArray[i]].trim() != "" && response[keyArray[i]] != null) {
+      measurementArray.push(response[keyArray[i]]);
     }
-  }
+  } 
   const combinedArray = [];
   for (let i = 0; i < ingredientListArray.length; i++) {
     combinedArray.push(`${ingredientListArray[i]} : ${measurementArray[i]}`);
